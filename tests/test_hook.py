@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -13,7 +14,7 @@ class StagedHookScenarios(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory(prefix='realign hook ')
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
-        self.env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1] / 'src'))
+        self.env = dict(os.environ, PYTHONPATH=str(Path(__file__).resolve().parents[1] / 'src'), REALIGN_PYTHON=sys.executable)
         self.git('init', '-q')
         rule = {'id':'v','kind':'derived','source':'source file.json','pointer':'/version','target':'README file.md','template':'{value}'}
         (self.root/'realign.json').write_text(json.dumps({'version':1,'rules':[rule]}))
@@ -74,3 +75,10 @@ class StagedHookScenarios(unittest.TestCase):
         self.assertEqual(self.hook().returncode,0)
         self.git('add','contract.json')
         self.assertEqual(self.hook().returncode,1)
+
+    def test_deep_staged_config_returns_error_without_traceback(self):
+        (self.root/'realign.json').write_text('['*2000+'0'+']'*2000)
+        self.git('add','realign.json')
+        result=self.hook()
+        self.assertEqual(result.returncode,2)
+        self.assertNotIn('Traceback',result.stderr)

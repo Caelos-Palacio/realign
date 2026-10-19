@@ -49,7 +49,7 @@ def _staged_report(root, operation=None):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(content)
             return content
-        config = json.loads(materialize("realign.json"))
+        config = _json(materialize("realign.json"))
         needed = set()
         if isinstance(config, dict) and isinstance(config.get("rules"), list):
             for rule in config["rules"]:

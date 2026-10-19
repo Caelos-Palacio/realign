@@ -28,8 +28,11 @@ def _finite_float(value):
 
 
 def _json(raw):
-    return json.loads(raw, object_pairs_hook=_pairs, parse_float=_finite_float,
-                      parse_constant=lambda x: (_ for _ in ()).throw(ConfigError(f'invalid number {x}')))
+    try:
+        return json.loads(raw, object_pairs_hook=_pairs, parse_float=_finite_float,
+                          parse_constant=lambda x: (_ for _ in ()).throw(ConfigError(f'invalid number {x}')))
+    except RecursionError:
+        raise ConfigError('input exceeds JSON decoder nesting limit') from None
 
 
 def _pointer(value, pointer):
