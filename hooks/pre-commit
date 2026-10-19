@@ -1,0 +1,5 @@
+#!/bin/sh
+# Requires an installed realign package or an absolute PYTHONPATH configured by you.
+set -eu
+root=$(git rev-parse --show-toplevel)
+exec "${REALIGN_PYTHON:-python3}" -P -m realign hook --root "$root" --staged

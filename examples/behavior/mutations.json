@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "mutations": [
+    {
+      "id": "threshold-exclusive",
+      "pointer": "/rules/2/when/args/3/op",
+      "value": "gt"
+    },
+    {
+      "id": "all-to-any",
+      "pointer": "/rules/2/when/op",
+      "value": "any"
+    },
+    {
+      "id": "remove-negation",
+      "pointer": "/rules/2/when/args/2",
+      "value": {
+        "op": "ne",
+        "pointer": "/suspended",
+        "value": false
+      }
+    },
+    {
+      "id": "revocation-inverted",
+      "pointer": "/rules/0/when/value",
+      "value": false
+    },
+    {
+      "id": "missing-approval-denied",
+      "pointer": "/rules/1/outcome/decision",
+      "value": "deny"
+    },
+    {
+      "id": "trace-order",
+      "pointer": "/rules/2/outcome/trace",
+      "value": [
+        "validate",
+        "write",
+        "authorize"
+      ]
+    },
+    {
+      "id": "effect-target",
+      "pointer": "/rules/2/outcome/effects/0/target",
+      "value": "OTHER.md"
+    },
+    {
+      "id": "equivalent-numeric-threshold",
+      "pointer": "/rules/2/when/args/3/value",
+      "value": 18.0
+    },
+    {
+      "id": "invalid-operator",
+      "pointer": "/rules/2/when/op",
+      "value": "execute"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "example-version",
+      "kind": "derived",
+      "source": "examples/manifest.json",
+      "pointer": "/version",
+      "target": "README.md",
+      "template": "Versión del ejemplo: {value}"
+    }
+  ]
+}

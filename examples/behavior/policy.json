@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "revocation",
+      "when": {
+        "op": "eq",
+        "pointer": "/revoked",
+        "value": true
+      },
+      "outcome": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "missing-approval",
+      "when": {
+        "op": "not",
+        "arg": {
+          "op": "exists",
+          "pointer": "/approval"
+        }
+      },
+      "outcome": {
+        "decision": "clarify",
+        "trace": [
+          "validate",
+          "clarify"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "allow",
+      "when": {
+        "op": "all",
+        "args": [
+          {
+            "op": "eq",
+            "pointer": "/approval",
+            "value": true
+          },
+          {
+            "op": "exists",
+            "pointer": "/suspended"
+          },
+          {
+            "op": "not",
+            "arg": {
+              "op": "ne",
+              "pointer": "/suspended",
+              "value": false
+            }
+          },
+          {
+            "op": "gte",
+            "pointer": "/age",
+            "value": 18
+          },
+          {
+            "op": "gte",
+            "pointer": "/balance",
+            "value": 100
+          },
+          {
+            "op": "any",
+            "args": [
+              {
+                "op": "eq",
+                "pointer": "/role",
+                "value": "maintainer"
+              },
+              {
+                "op": "eq",
+                "pointer": "/exception",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "outcome": {
+        "decision": "allow",
+        "trace": [
+          "validate",
+          "authorize",
+          "write"
+        ],
+        "effects": [
+          {
+            "action": "write-derived-block",
+            "target": "README.md"
+          }
+        ]
+      }
+    }
+  ],
+  "default": {
+    "decision": "deny",
+    "trace": [
+      "validate",
+      "deny"
+    ],
+    "effects": []
+  }
+}

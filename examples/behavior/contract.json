@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "boundary-allowed",
+      "requirementId": "R-THRESHOLD",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "allow",
+        "trace": [
+          "validate",
+          "authorize",
+          "write"
+        ],
+        "effects": [
+          {
+            "action": "write-derived-block",
+            "target": "README.md"
+          }
+        ]
+      }
+    },
+    {
+      "id": "underage-denied",
+      "requirementId": "R-THRESHOLD",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 17,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "underbalance-denied",
+      "requirementId": "R-THRESHOLD",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 99,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "age-boolean-denied",
+      "requirementId": "R-TYPES",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": true,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "approval-integer-denied",
+      "requirementId": "R-TYPES",
+      "given": {
+        "approval": 1,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "suspension-denied",
+      "requirementId": "R-NEGATION",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": true,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "suspension-missing-denied",
+      "requirementId": "R-NEGATION",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "approval-missing-clarify",
+      "requirementId": "R-AUTHORITY",
+      "given": {
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "clarify",
+        "trace": [
+          "validate",
+          "clarify"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "approval-null-denied",
+      "requirementId": "R-AUTHORITY",
+      "given": {
+        "approval": null,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "revoked-denied",
+      "requirementId": "R-REVOCATION",
+      "given": {
+        "approval": true,
+        "revoked": true,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "revoked-missing-approval-denied",
+      "requirementId": "R-REVOCATION",
+      "given": {
+        "revoked": true,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "exception-allowed",
+      "requirementId": "R-EXCEPTION",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "contributor",
+        "exception": true
+      },
+      "expected": {
+        "decision": "allow",
+        "trace": [
+          "validate",
+          "authorize",
+          "write"
+        ],
+        "effects": [
+          {
+            "action": "write-derived-block",
+            "target": "README.md"
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-role-or-exception-denied",
+      "requirementId": "R-EXCEPTION",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 18,
+        "balance": 100,
+        "role": "contributor",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "exception-does-not-bypass-age",
+      "requirementId": "R-EXCEPTION",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": false,
+        "age": 17,
+        "balance": 100,
+        "role": "contributor",
+        "exception": true
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "suspension-integer-denied",
+      "requirementId": "R-TYPES",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": 0,
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    },
+    {
+      "id": "suspension-string-denied",
+      "requirementId": "R-TYPES",
+      "given": {
+        "approval": true,
+        "revoked": false,
+        "suspended": "false",
+        "age": 18,
+        "balance": 100,
+        "role": "maintainer",
+        "exception": false
+      },
+      "expected": {
+        "decision": "deny",
+        "trace": [
+          "validate",
+          "deny"
+        ],
+        "effects": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "repair-authorization",
+      "kind": "behavior",
+      "source": "policy.json",
+      "contract": "contract.json"
+    }
+  ]
+}

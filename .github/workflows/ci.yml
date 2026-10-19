@@ -1,0 +1,36 @@
+name: coherence
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Acceptance scenarios
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Project coherence
+        run: PYTHONPATH=src python -m realign check --root . --json
+      - name: Semantic corpus and protected evidence
+        run: |
+          artifact_dir=$(mktemp -d)
+          PYTHONPATH=src python -m realign mutate --root . --policy examples/behavior/policy.json --contract examples/behavior/contract.json --mutations examples/behavior/mutations.json --json
+          PYTHONPATH=src python -m realign baseline --root . --baseline "$artifact_dir/baseline.json" --json
+          PYTHONPATH=src python -m realign check --root . --baseline "$artifact_dir/baseline.json" --evidence "$artifact_dir/evidence.json" --json
+          PYTHONPATH=src python -m realign verify-evidence --evidence "$artifact_dir/evidence.json" --json
+      - name: Build and install wheel in isolated environment
+        run: |
+          python -m pip wheel --no-deps --wheel-dir dist .
+          python -m venv /tmp/realign-installed
+          /tmp/realign-installed/bin/python -m pip install --no-deps dist/*.whl
+          cd /tmp
+          /tmp/realign-installed/bin/python -I -m realign check --root "$GITHUB_WORKSPACE" --json
+          /tmp/realign-installed/bin/realign check --root "$GITHUB_WORKSPACE"
