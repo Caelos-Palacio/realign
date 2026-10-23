@@ -64,27 +64,27 @@ def _staged_report(root, operation=None):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(prog="realign", description="Comprueba coherencia y repara texto derivado declarado.")
+    parser = argparse.ArgumentParser(prog="realign", description="Check project coherence and repair declared derived text.")
     parser.add_argument("command", choices=("check", "fix", "hook", "baseline", "mutate", "verify-evidence"))
-    parser.add_argument("--root", type=Path, default=Path.cwd(), help="Raíz del proyecto (predeterminada: directorio actual)")
-    parser.add_argument("--json", action="store_true", dest="as_json", help="Imprime evidencia JSON")
-    parser.add_argument("--staged", action="store_true", help="Comprueba el índice Git (solo hook)")
-    parser.add_argument("--baseline", type=Path, help="Captura o verifica criterios de aceptación")
-    parser.add_argument("--evidence", type=Path, help="Expediente nuevo, sin sobrescribir")
-    parser.add_argument("--policy", help="Política JSON relativa a root, para mutate")
-    parser.add_argument("--contract", help="Contrato JSON relativo a root, para mutate")
-    parser.add_argument("--mutations", help="Mutaciones JSON relativas a root, para mutate")
+    parser.add_argument("--root", type=Path, default=Path.cwd(), help="Project root (default: current directory)")
+    parser.add_argument("--json", action="store_true", dest="as_json", help="Print JSON evidence")
+    parser.add_argument("--staged", action="store_true", help="Check the Git index (hook only)")
+    parser.add_argument("--baseline", type=Path, help="Capture or verify acceptance criteria")
+    parser.add_argument("--evidence", type=Path, help="New evidence file, never overwritten")
+    parser.add_argument("--policy", help="JSON policy relative to root, for mutate")
+    parser.add_argument("--contract", help="JSON contract relative to root, for mutate")
+    parser.add_argument("--mutations", help="JSON mutations relative to root, for mutate")
     args = parser.parse_args(argv)
     if args.staged and args.command != "hook":
-        parser.error("--staged solo se permite con hook")
+        parser.error("--staged is only allowed with hook")
     if args.command == "baseline" and (args.baseline is None or args.evidence is not None):
-        parser.error("baseline requiere --baseline y no admite --evidence")
+        parser.error("baseline requires --baseline and does not accept --evidence")
     if args.command == "mutate" and (not all((args.policy,args.contract,args.mutations)) or args.baseline or args.evidence):
-        parser.error("mutate requiere --policy --contract --mutations; no admite baseline/evidence")
+        parser.error("mutate requires --policy --contract --mutations; it does not accept baseline/evidence")
     if args.command != "mutate" and any((args.policy,args.contract,args.mutations)):
-        parser.error("policy/contract/mutations solo se permiten con mutate")
+        parser.error("policy/contract/mutations are only allowed with mutate")
     if args.command == "verify-evidence" and (args.evidence is None or args.baseline):
-        parser.error("verify-evidence requiere --evidence y no admite --baseline")
+        parser.error("verify-evidence requires --evidence and does not accept --baseline")
     try:
         def operate(harness):
             if args.command == "baseline":

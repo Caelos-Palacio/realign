@@ -7,6 +7,14 @@
       "source": "examples/manifest.json",
       "pointer": "/version",
       "target": "README.md",
+      "template": "Example version: {value}"
+    },
+    {
+      "id": "example-version-es",
+      "kind": "derived",
+      "source": "examples/manifest.json",
+      "pointer": "/version",
+      "target": "README.es.md",
       "template": "Versión del ejemplo: {value}"
     }
   ]

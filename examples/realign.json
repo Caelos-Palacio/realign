@@ -1,7 +1,7 @@
 {
   "version": 1,
   "rules": [
-    {"id":"version","kind":"derived","source":"manifest.json","pointer":"/version","target":"README.md","template":"Versión: {value}"},
+    {"id":"version","kind":"derived","source":"manifest.json","pointer":"/version","target":"README.md","template":"Version: {value}"},
     {"id":"payload","kind":"contract","source":"data.json","schema":"schema.json"}
   ]
 }

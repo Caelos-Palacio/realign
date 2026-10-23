@@ -1,0 +1,27 @@
+[
+  {
+    "cmd": "grep realign:version examples/README.md",
+    "out": "<!-- realign:version:start -->Version: 0.0.0<!-- realign:version:end -->",
+    "rc": 0
+  },
+  {
+    "cmd": "realign check --root examples --json | grep -E '\"(status|code)\"'",
+    "out": "  \"status\": \"drift\",\n      \"code\": \"DRIFT\",",
+    "rc": 1
+  },
+  {
+    "cmd": "realign fix --root examples --json | grep status",
+    "out": "  \"status\": \"repaired\",",
+    "rc": 0
+  },
+  {
+    "cmd": "grep realign:version examples/README.md",
+    "out": "<!-- realign:version:start -->Version: 1.0.0<!-- realign:version:end -->",
+    "rc": 0
+  },
+  {
+    "cmd": "realign check --root examples",
+    "out": "Realign: clean",
+    "rc": 0
+  }
+]
