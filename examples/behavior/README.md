@@ -1,16 +1,16 @@
-# Contrato de comportamiento local
+# Local behavior contract
 
-Este corpus fue escrito independientemente de la implementación del intérprete. Sus 16 escenarios fijan expectativas sobre una política pequeña: autorización explícita, revocación prioritaria, suspensión, umbrales y una excepción de rol que no elimina los demás requisitos.
+This corpus was written independently of the interpreter implementation. Its 16 scenarios fix expectations about a small policy: explicit authorization, revocation priority, suspension, thresholds, and a role exception that does not remove the other requirements.
 
-`decision`, `trace` y `effects` son datos simulados. Una traza `write` no ejecuta una escritura; el corpus no demuestra que un agente o API real respete la política. Los umbrales son ejemplos del contrato, no reglas universales.
+`decision`, `trace` and `effects` are simulated data. A `write` trace does not perform a write; the corpus does not prove that a real agent or API respects the policy. The thresholds are contract examples, not universal rules.
 
-Los negativos son esenciales: una política que deniega todo tampoco satisface el contrato. Conservar identificadores no preserva negación, cuantificadores u orden; por eso se comprueba la salida completa, incluidos efectos y secuencia.
+Negatives are essential: a policy that denies everything does not satisfy the contract either. Preserving identifiers does not preserve negation, quantifiers or order; that is why the complete output is checked, including effects and sequence.
 
-## Ejecutar desde la raíz del checkout
+## Run from the checkout root
 
 ```sh
 PYTHONPATH=src python3 -m realign check --root examples/behavior --json
 PYTHONPATH=src python3 -m realign mutate --root examples/behavior --policy policy.json --contract contract.json --mutations mutations.json --json
 ```
 
-El corpus de mutaciones contiene nueve variantes declaradas: siete son detectadas, una numéricamente equivalente sobrevive y una es inválida. Son ocho variantes válidas, no nueve regresiones detectables. No presentar esta selección diseñada como cobertura general. La corrida no modifica la política ni el contrato.
+The mutation corpus contains nine declared variants: seven are detected, one numerically equivalent variant survives and one is invalid. That is eight valid variants, not nine detectable regressions. Do not present this designed selection as general coverage. The run does not modify the policy or the contract.

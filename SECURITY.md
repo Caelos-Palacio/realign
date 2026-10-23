@@ -1,13 +1,13 @@
-# Seguridad
+# Security
 
-Realign comprueba archivos declarados y contratos finitos. No es un sandbox ni una garantía de corrección semántica general. Los efectos de las políticas son datos: no ejecuta herramientas, migraciones ni comandos del proyecto.
+Realign checks declared files and finite contracts. It is not a sandbox and not a guarantee of general semantic correctness. Policy effects are data: it does not run tools, migrations or project commands.
 
-Usa una instalación confiable del harness, revisa los contratos y conserva el baseline bajo control de cambios. Un digest detecta cambios internos, pero quien pueda sustituir el archivo también puede recalcularlo. Los bloqueos son cooperativos; los reemplazos son atómicos por archivo, sin transacción durable de varios archivos. Un escritor adversario del mismo usuario y las carreras de rutas quedan fuera de estas garantías.
+Use a trusted installation of the harness, review your contracts, and keep the baseline under version control. A digest detects internal changes, but anyone who can replace the file can also recompute it. Locks are cooperative; replacements are atomic per file, with no durable multi-file transaction. An adversarial writer running as the same user, and path races, are outside these guarantees.
 
-El hook comprueba el índice Git y puede omitirse; complementa su uso con CI. Los expedientes omiten valores de datos, pero contienen nombres de archivos e identificadores que podrían ser sensibles. Revísalos antes de compartirlos.
+The hook checks the Git index and can be skipped; complement it with CI. Evidence files omit data values, but they contain file names and identifiers that may be sensitive. Review them before sharing.
 
-## Reportar una vulnerabilidad
+## Reporting a vulnerability
 
-Usa **Security → Report a vulnerability** si GitHub muestra ese canal privado en el repositorio. Si no está disponible, abre únicamente una solicitud de contacto privado sin detalles de explotación ni datos sensibles. No publiques secretos, credenciales, archivos privados ni una reproducción que los contenga en issues o comentarios.
+Use **Security -> Report a vulnerability** if GitHub shows that private channel on the repository. If it is not available, open only a private-contact request with no exploit details or sensitive data. Do not publish secrets, credentials, private files, or a reproduction containing them in issues or comments.
 
-Incluye versión, alcance afectado y una reproducción mínima con datos ficticios por el canal privado disponible. No se promete un plazo de respuesta ni cobertura de versiones distintas de la versión más reciente.
+Include the version, the affected scope and a minimal reproduction using fictitious data through the private channel that is available. No response time is promised, and only the latest version is covered.
